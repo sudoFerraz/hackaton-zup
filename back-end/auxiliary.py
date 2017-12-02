@@ -69,6 +69,44 @@ class sinais_handler(object):
 				req['temperatura'] = sinal.temperatura
 				sinal_list.append(json.dumps(req))
 
+class user_handler(object):
+
+	def create_user(self, session, nname, ntipo):
+		new_user = model.User(name=nname, tipo=ntipo)
+		session.add(new_user)
+		session.commit()
+		session.flush()
+		return 'ok'
+
+	def delete_user(self, session, user_id):
+		deleted_user = session.query(User).filter_by(id=user_id).delete()
+		session.commit()
+		session.flush()
+		return "ok"
+
+	def update_user(self, session, user_id, nname, ntipo):
+		updated_user = session.qwuery(User).filter_by(id=user_id).first()
+		updated_user.name = nname
+		updated_user.tipo = ntipo
+		session.commit()
+		session.flush()
+		return "ok"
+
+	def get_all(self, session):
+		users = session.query(User).all()
+		if not users:
+			return "erro"
+		else:
+			user_list = []
+			for user in users:
+				newuser = {}
+				newuser['name'] = user.name
+				newuser['tipo'] = user.tipo
+				newuser['id'] = user.id
+				user_list.append(json.dumps(newuser))
+			return user_list
+
+
 class recurso_handler(object):
 
 	def create_recurso(self, session, nstatus, nlocalizacao, ntipo):

@@ -34,24 +34,31 @@ def app_teardown(response_or_exc):
 #def index():
 #	return "https://www.youtube.com/watch?v=hC8CH0Z3L54"
 
-@app.route('/recurso/status', methods=['GET', 'POST'])
-def update_status_recurso():
+@app.route('/recurso/status/<int:recurso_id>', methods=['GET', 'POST'])
+def update_status_recurso(recurso_id):
 	if request.method == 'GET':
-		return "get"
+		recurso_handler.update_status(session, recurso_id)
+		return "ok"
 	elif request.method == 'POST':
 		recurso_id = request.form['id']
 		recurso_handler.update_status(session, recurso_id)
 		return "ok"
 
-@app.route('/recurso/delete', methods=['POST'])
-def delete_recurso():
+@app.route('/recurso/delete/<int:recurso_id>', methods=['GET', 'POST'])
+def delete_recurso(recurso_id):
+	if request.method == 'GET':
+		recurso_handler.delete_recurso(session, recurso_id)
+		return "ok"
 	if request.method == 'POST':
 		recurso_id = request.form['id']
 		recurso_handler.delete_recurso(session, recurso_id)
 		return "ok"
 
-@app.route('/recurso/getdata', methods=['POST'])
-def get_recurso():
+@app.route('/recurso/getdata/<int:recurso_id>', methods=['GET', 'POST'])
+def get_recurso(recurso_id):
+	if request.method == 'GET':
+		reurso = recurso_handler.get_recurso(session, recurso_id)
+		return str(recurso)
 	if request.method == 'POST':
 		recurso_id = request.form['id']
 		recurso = recurso_handler.get_recurso(session, recurso_id)
@@ -68,23 +75,24 @@ def register_recurso():
 		recurso_handler.create_recurso(session, status, localizacao, tipo)
 		return "ok"
 
-@app.route('/recurso/getall')
+@app.route('/recurso/getall', methods=['GET'])
 def get_all_recurso():
-	recursos = recurso_handler.get_all_recurso(session)
-	return str(recursos)
+	if requset.method == 'GET':
+		recursos = recurso_handler.get_all_recurso(session)
+		return str(recursos).replace("'", "")
 
 
 @app.route('/recurso/getopen', methods=['GET'])
 def get_recurso_open():
 	if request.method == 'GET':
 		open_recursos = recurso_handler.get_all_open(session)
-		return str(open_recursos)
+		return str(open_recursos).replace("'", "")
 
 @app.route('/recurso/getclosed', methods=['GET'])
 def get_recurso_closed():
 	if request.method == 'GET':
 		closed_recurso = recurso_handler.get_all_closed(session)
-		return str(closed_recurso)
+		return str(closed_recurso).replace("'", "")
 
 @app.route('/ocorrencia/register', methods=['POST'])
 def ocorrencia_register():
@@ -109,26 +117,35 @@ def ocorrencia_register():
 			sexo, idade, queixa, observacoes, emergencia, status, id_atendente)
 		return "ok"
 
-@app.route('/ocorrencia/delete', methods=['POST'])
-def delete_ocorrencia():
+@app.route('/ocorrencia/delete/<int:ocorrencia_id>', methods=['GET', 'POST'])
+def delete_ocorrencia(ocorrencia_id):
+	if request.method == 'GET':
+		ocorrencia_handler.delete_ocorrencia(session, ocorrencia_id)
+		return "ok"
 	if request.method == 'POST':
 		id_ocorrencia = request.form['id']
-		ocorrencia_hanler.delete_ocorrencia(session, id_ocorrencia)
+		ocorrencia_handler.delete_ocorrencia(session, id_ocorrencia)
 		return "ok"
 
-@app.route('/ocorrencia/update_status', methods=['POST'])
-def update_status(self, session, id_ocorrencia):
+@app.route('/ocorrencia/update_status/<int:id_ocorrencia>', methods=['GET', 'POST'])
+def update_status(id_ocorrencia):
+	if request.method == 'GET':
+		ocorrencia_handler.update_status(session, id_ocorrencia)
+		return "ok"
 	if request.method == 'POST':
 		id_ocorrencia = request.form['id']
 		ocorrencia_handler.update_status(session, id_ocorrencia)
 		return "ok"
 
-@app.route('/ocorrencia/getdata', methods=['POST'])
-def get_ocorrencia():
+@app.route('/ocorrencia/getdata/<int:id_ocorrencia>', methods=['GET', 'POST'])
+def get_ocorrencia(id_ocorrencia):
+	if request.method == 'GET':
+		found_ocorrencia. = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
+		return str(found_ocorrencia).replace("'", "")
 	if request.method == 'POST':
 		id_ocorrencia = request.form['id']
 		found_ocorrencia = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
-		return str(found_ocorrencia)
+		return str(found_ocorrencia).replace("'", "")
 
 @app.route('/ocorrencia/update', methods=['POST'])
 def update_ocorrencia():
@@ -160,19 +177,19 @@ def update_ocorrencia():
 def get_all_ocorrencias():
 	if request.method == 'GET':
 		ocorrencias = ocorrencia_handler.get_all_ocorrencias(session)
-		return str(ocorrencias)
+		return str(ocorrencias).replace("'", "")
 
 @app.route('/ocorrencia/getopen', methods=['GET'])
 def get_all_open():
 	if request.method == 'GET':
 		ocorrencias = ocorrencia_handler.get_all_open(session)
-		return str(ocorrencias)
+		return str(ocorrencias).replace("'", "")
 
 @app.route('/ocorrencia/getclosed', methods=['GET'])
 def get_all_closed():
 	if request.method == 'GET':
 		ocorrencias = ocorrencia_handler.get_all_closed(session)
-		return str(ocorrencias)
+		return str(ocorrencias).replace("'", "")
 
 
 
