@@ -28,6 +28,7 @@ class Ocorrencia(Base):
 	emergencia = Column(Boolean)
 	status = Column(String)
     data = Column(DateTime, server_default=func.now())
+    id_atendente = Column(Integer, ForeignKey('User.id'))
 
 class User(Base):
 
