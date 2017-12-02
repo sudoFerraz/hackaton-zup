@@ -168,13 +168,13 @@ class ocorrencia_handler(object):
 	def create_ocorrencia(self, session, ntelefone, nsolicitante, \
 		nmunicipio, nendereco, nnumero, nbairro, nreferencia, \
 		npaciente, nsexo, nidade, nqueixa, nobservacoes, \
-		nemergencia, nstatus):
+		nemergencia, nstatus, nid_atendente):
 		new_ocorrencia = model.Ocorrencia(telefone=ntelefone, \
 			solicitante=nsolicitante, municipio=nmunicipio, \
 			endereco=nendereco, numero=nnumero, bairro=nbairro, \
 			referencia=nreferencia, paciente=npaciente, sexo=nsexo, \
 			idade=nidade, queixa=nqueixa, observacoes=nobservacoes, \
-			emergencia=nemergencia, status=nstatus)
+			emergencia=nemergencia, status=nstatus, id_atendente=nid_atendente)
 		session.add(new_ocorrencia)
 		session.commit()
 		session.flush()
@@ -222,6 +222,7 @@ class ocorrencia_handler(object):
 				req['observacoes'] = found_ocorrencia.observacoes
 				req['emergencia'] = found_ocorrencia.emergencia
 				req['status'] = found_ocorrencia.status
+				req['id_atendente'] = found_ocorrencia.id_atendente
 				return json.dumps(req)
 			else:
 				return False
@@ -229,7 +230,7 @@ class ocorrencia_handler(object):
 	def update_ocorrencia(self, session, idocorrencia, ntelefone, nsolicitante, \
 		nmunicipio, nendereco, nnumero, nbairro, nreferencia, \
 		npaciente, nsexo, nidade, nqueixa, nobservacoes, nemergencia, \
-		nstatus):
+		nstatus, nid_atendente):
 		found_ocorrencia = session.query(Ocorrencia).filter_by(id=idocorrencia).first()
 		if not found_ocorrencia:
 			return False
@@ -249,6 +250,7 @@ class ocorrencia_handler(object):
 				found_ocorrencia.observacoes = nobservacoes
 				found_ocorrencia.emergencia = nemergencia
 				found_ocorrencia.status = nstatus
+				found_ocorrencia.id_atendente = nid_atendente
 				session.commit()
 				session.flush()
 				req = {}
@@ -266,6 +268,7 @@ class ocorrencia_handler(object):
 				req['observacoes'] = found_ocorrencia.observacoes
 				req['emergencia'] = found_ocorrencia.emergencia
 				req['status'] = found_ocorrencia.status
+				req['id_atendente'] = found_ocorrencia.id_atendente
 				return json.dumps(req)
 
 		def get_all_ocorrencia(self, session):
@@ -290,6 +293,7 @@ class ocorrencia_handler(object):
 					req['observacoes'] = found_ocorrencia.observacoes
 					req['emergencia'] = found_ocorrencia.emergencia
 					req['status'] = found_ocorrencia.status
+					req['id_atendente'] = found_ocorrencia.id_atendente
 					ocorrencia_list.append(json.dumps(req))
 				return ocorrencia_list
 
@@ -316,6 +320,7 @@ class ocorrencia_handler(object):
 						req['observacoes'] = found_ocorrencia.observacoes
 						req['emergencia'] = found_ocorrencia.emergencia
 						req['status'] = found_ocorrencia.status
+						req['id_atendente'] = found_ocorrencia.id_atendente
 						ocorrencia_list.append(json.dumps(req))
 				return ocorrencia_list
 
@@ -342,6 +347,7 @@ class ocorrencia_handler(object):
 						req['observacoes'] = found_ocorrencia.observacoes
 						req['emergencia'] = found_ocorrencia.emergencia
 						req['status'] = found_ocorrencia.status
+						req['id_atendente'] = found_ocorrencia.id_atendente
 						ocorrencia_list.append(json.dumps(req))
 				return ocorrencia_list
 
