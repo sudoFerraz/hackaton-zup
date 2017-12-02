@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from flask_admin import Admin
 import pandas_datareader as web
+from flask import Response
 
 app = Flask(__name__, template_folder='')
 
@@ -25,6 +26,8 @@ session = auxiliary.ostools().db_connection()
 sinal_handler = auxiliary.sinal_handler()
 recurso_handler = auxiliary.recurso_handler()
 ocorrencia_handler = auxiliary.ocorrencia_handler()
+user_handler = auxiliary.user_handler()
+
 
 @app.teardown_request
 def app_teardown(response_or_exc):
@@ -34,6 +37,28 @@ def app_teardown(response_or_exc):
 #@app.route('/')
 #def index():
 #	return "https://www.youtube.com/watch?v=hC8CH0Z3L54"
+
+@app.route('/user/register', methods=['GET', 'POST'])
+def create_user():
+	if request.method == 'GET':
+		return "get"
+	if request.method == 'POST':
+		name = request.form['name']
+		tipo = request.form['tipo']
+		user_handler.create_handler(session, name, tipo)
+		return "ok"
+
+@app.route('/user/update', methods=['GET', 'POST'])
+def update_user():
+	if request.method == 'GET':
+		return "get"
+	if request.method == 'POST':
+		user_id = request.form['id']
+		name = request.form['name']
+		tipo = request.form['tipo']
+		user_handler.update_user(session, user_id, name, tipo)
+		return "ok"
+
 
 @app.route('/sinal/register', methods=['GET', 'POST'])
 def create_sinal():
@@ -45,25 +70,26 @@ def create_sinal():
 		frequencia_cardiaca = request.form['frequencia_cardiaca']
 		saturacao_oxigenio = request.form['saturacao_oxigenio']
 		temperatura = request.form['temperatura']
+		return "ok"
 
 
 @app.route('/sinal/getdata/<int:id_sinal>', methods=['GET'])
 def get_data_sinal(id_sinal):
 	if request.method == 'GET':
 		found_sinal = sinal_handler.get_sinal(session, id_sinal)
-		return str(found_sinal)
+		return Response(str(found_sinal), mimetype='application/json')
 
 @app.route('/sinal/get_by_ocorrencia/<int:ocorrencia_id>', methods=['GET'])
 def get_sinal_by_ocorrencia(ocorrencia_id):
 	if request.method == 'GET':
 		found_sinal = sinal_handler.get_sinal_by_ocorrencia(session, ocorrencia_id)
-		return str(found_sinal)
+		return Response(str(found_sinal), mimetype='application/json')
 
 @app.route('/sinal/getall', methods=['GET'])
 def get_all_sinal():
 	if request.method == 'GET':
 		sinais = sinal_handler.get_all_sinal(session)
-		return str(sinais)
+		return Response(str(sinais), mimetype='application/json')
 
 @app.route('/recurso/status/<int:recurso_id>', methods=['GET', 'POST'])
 def update_status_recurso(recurso_id):
@@ -93,7 +119,7 @@ def get_recurso(recurso_id):
 	if request.method == 'POST':
 		recurso_id = request.form['id']
 		recurso = recurso_handler.get_recurso(session, recurso_id)
-		return str(recurso)
+		return Response(str(recurso), mimetype='application/json')
 
 @app.route('/recurso/register', methods=['GET', 'POST'])
 def register_recurso():
@@ -110,20 +136,20 @@ def register_recurso():
 def get_all_recurso():
 	if requset.method == 'GET':
 		recursos = recurso_handler.get_all_recurso(session)
-		return str(recursos).replace("'", "")
+		return Response(str(recursos).replace("'", ""), mimetype='application/json')
 
 
 @app.route('/recurso/getopen', methods=['GET'])
 def get_recurso_open():
 	if request.method == 'GET':
 		open_recursos = recurso_handler.get_all_open(session)
-		return str(open_recursos).replace("'", "")
+		return Response(str(open_recursos).replace("'", ""), mimetype='application/json')
 
 @app.route('/recurso/getclosed', methods=['GET'])
 def get_recurso_closed():
 	if request.method == 'GET':
 		closed_recurso = recurso_handler.get_all_closed(session)
-		return str(closed_recurso).replace("'", "")
+		return Response(str(closed_recurso).replace("'", ""), mimetype='application/json')
 
 @app.route('/ocorrencia/register', methods=['POST'])
 def ocorrencia_register():
@@ -176,7 +202,7 @@ def get_ocorrencia(id_ocorrencia):
 	if request.method == 'POST':
 		id_ocorrencia = request.form['id']
 		found_ocorrencia = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
-		return str(found_ocorrencia).replace("'", "")
+		return Response(str(found_ocorrencia).replace("'", ""), mimetype='application/json')
 
 @app.route('/ocorrencia/update', methods=['POST'])
 def update_ocorrencia():
@@ -201,26 +227,26 @@ def update_ocorrencia():
 			solicitante, municipio, enereco, numero, bairro, referencia, \
 			paciente, sexo, idade, queixa, observacoes, emergencia, status, \
 			id_atendente)
-		return str(updated_ocorrencia)
+		return Response(str(updated_ocorrencia), mimetype='application/json')
 
 
 @app.route('/ocorrencia/getall', methods=['GET'])
 def get_all_ocorrencias():
 	if request.method == 'GET':
 		ocorrencias = ocorrencia_handler.get_all_ocorrencias(session)
-		return str(ocorrencias).replace("'", "")
+		return Response(str(ocorrencias).replace("'", ""), mimetype='application/json')
 
 @app.route('/ocorrencia/getopen', methods=['GET'])
 def get_all_open():
 	if request.method == 'GET':
 		ocorrencias = ocorrencia_handler.get_all_open(session)
-		return str(ocorrencias).replace("'", "")
+		return Response(str(ocorrencias).replace("'", ""), mimetype='application/json')
 
 @app.route('/ocorrencia/getclosed', methods=['GET'])
 def get_all_closed():
 	if request.method == 'GET':
 		ocorrencias = ocorrencia_handler.get_all_closed(session)
-		return str(ocorrencias).replace("'", "")
+		return Response(str(ocorrencias).replace("'", ""), mimetype='application/json')
 
 
 
