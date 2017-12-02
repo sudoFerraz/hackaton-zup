@@ -109,6 +109,72 @@ def ocorrencia_register():
 			sexo, idade, queixa, observaoes, emergencia, status, id_atendente)
 		return "ok"
 
+@app.route('/ocorrencia/delete', methods=['POST'])
+def delete_ocorrencia():
+	if request.method == 'POST':
+		id_ocorrencia = request.form['id']
+		ocorrencia_hanler.delete_ocorrencia(session, id_ocorrencia)
+		return "ok"
+
+@app.route('/ocorrencia/update_status', methods=['POST'])
+def update_status(self, session, id_ocorrencia):
+	if request.method == 'POST':
+		id_ocorrencia = request.form['id']
+		ocorrencia_handler.update_status(session, id_ocorrencia)
+		return "ok"
+
+@app.route('/ocorrencia/getdata', methods=['POST'])
+def get_ocorrencia():
+	if request.method == 'POST':
+		id_ocorrencia = request.form['id']
+		found_ocorrencia = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
+		return str(found_ocorrencia)
+
+@app.route('/ocorrencia/update', methods=['POST'])
+def update_ocorrencia():
+	if request.method == 'POST':
+		id_ocorrencia = request.form['id']
+		telefone = request.form['telefone']
+		solicitante = request.form['solicitante']
+		municipio = request.form['municipio']
+		endereco = request.form['endereco']
+		numero = request.form['numero']
+		bairro = request.form['bairro']
+		referencia = request.form['referencia']
+		paciente = request.form['paciente']
+		sexo = request.form['sexo']
+		idade = request.form['idade']
+		queixa = request.form['queixa']
+		observacoes = request.form['observacoes']
+		emergencia = request.form['emergencia']
+		status = request.form['status']
+		id_atendente = request.form['id_atendente']
+		updated_ocorrencia = ocorrencia_handler.update_ocorrencia(sesion, id_ocorrencia, telefone, \
+			solicitante, municipio, enereco, numero, bairro, referencia, \
+			paciente, sexo, idade, queixa, observacoes, emergencia, status, \
+			id_atendente)
+		return str(updated_ocorrencia)
+
+
+@app.route('/ocorrencia/getall', methods=['GET'])
+def get_all_ocorrencias():
+	if request.method == 'GET':
+		ocorrencias = ocorrencia_handler.get_all_ocorrencias(session)
+		return str(ocorrencias)
+
+@app.route('/ocorrencia/getopen', methods=['GET'])
+def get_all_open():
+	if request.method == 'GET':
+		ocorrencias = ocorrencia_handler.get_all_open(session)
+		return str(ocorrencias)
+
+@app.route('/ocorrencia/getclosed', methods=['GET'])
+def get_all_closed():
+	if request.method == 'GET':
+		ocorrencias = ocorrencia_handler.get_all_closed(session)
+		return str(ocorrencias)
+
+
 
 
 
