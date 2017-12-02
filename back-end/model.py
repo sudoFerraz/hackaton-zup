@@ -27,6 +27,14 @@ class Ocorrencia(Base):
 	observacoes = Column(String)
 	emergencia = Column(Boolean)
 	status = Column(String)
+    data = Column(DateTime, server_default=func.now())
+
+class User(Base):
+
+    __tablename__ = 'User'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    tipo = Column(String)
 
 class Media(Base):
 	__tablename__ = 'Media'
