@@ -27,8 +27,8 @@ class Ocorrencia(Base):
 	observacoes = Column(String)
 	emergencia = Column(Boolean)
 	status = Column(String)
-    data = Column(DateTime, server_default=func.now())
-    id_atendente = Column(Integer, ForeignKey('User.id'))
+	data = Column(DateTime, server_default=func.now())
+	id_atendente = Column(Integer, ForeignKey('User.id'))
 
 class User(Base):
 
@@ -50,7 +50,7 @@ class Recurso(Base):
 	status = Column(String)
 	localizacao = Column(String)
 	tipo = Column(String)
-    atendendo = Column(Integer, ForeignKey('Ocorrencia.id'))
+	atendendo = Column(Integer, ForeignKey('Ocorrencia.id'))
 
 class Sinais_Vitais(Base):
 	__tablename__ = 'Sinais_Vitais'

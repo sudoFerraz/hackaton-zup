@@ -105,6 +105,7 @@ class recurso_handler(object):
 		if not found_recurso:
 			return "erro"
 		req = {}
+		req['id'] = found_recurso.id
 		req['status'] = found_recurso.status
 		req['localizacao'] = found_recurso.localizacao
 		req['tipo'] = found_recurso.tipo
@@ -119,6 +120,7 @@ class recurso_handler(object):
 			recurso_list = []
 			for recurso in recursos:
 				req = {}
+				req['id'] = recurso.id
 				req['status'] = recurso.status
 				req['localizacao'] = recurso.localizacao
 				req['tipo'] = recurso.tipo
@@ -126,6 +128,8 @@ class recurso_handler(object):
 				recurso_list.append(json.dumps(req))
 			return recurso_list
 
+
+#Pega todos recursos disponiveis
 	def get_all_open(self, session):
 		recursos = session.query(Recurso).all()
 		if not recursos:
@@ -135,6 +139,7 @@ class recurso_handler(object):
 			for recurso in recursos:
 				if recurso.status == "disponivel":
 					req = {}
+					recurso['id'] = recurso.id
 					req['status'] = recurso.status
 					req['localizacao'] = recurso.localizacao
 					req['tipo'] = recurso.tipo
@@ -149,8 +154,9 @@ class recurso_handler(object):
 		else:
 			recurso_list = []
 			for recurso in recursos:
-				if recurso.status = "ocupado":
+				if recurso.status == "ocupado":
 					req = {}
+					req['id'] = recurso.id
 					req['status'] = recurso.status
 					req['localizacao'] = recurso.localizacao
 					req['tipo'] = recurso.tipo
@@ -166,13 +172,13 @@ class ocorrencia_handler(object):
 	def create_ocorrencia(self, session, ntelefone, nsolicitante, \
 		nmunicipio, nendereco, nnumero, nbairro, nreferencia, \
 		npaciente, nsexo, nidade, nqueixa, nobservacoes, \
-		nemergencia, nstatus):
+		nemergencia, nstatus, nid_atendente):
 		new_ocorrencia = model.Ocorrencia(telefone=ntelefone, \
 			solicitante=nsolicitante, municipio=nmunicipio, \
 			endereco=nendereco, numero=nnumero, bairro=nbairro, \
 			referencia=nreferencia, paciente=npaciente, sexo=nsexo, \
 			idade=nidade, queixa=nqueixa, observacoes=nobservacoes, \
-			emergencia=nemergencia, status=nstatus)
+			emergencia=nemergencia, status=nstatus, id_atendente=nid_atendente)
 		session.add(new_ocorrencia)
 		session.commit()
 		session.flush()
@@ -206,6 +212,7 @@ class ocorrencia_handler(object):
 		else:
 			if found_ocorrencia.id == id_ocorrencia:
 				req = {}
+				req['id'] = found_ocorrencia.id
 				req['telefone'] = found_ocorrencia.telefone
 				req['solicitante'] = found_ocorrencia.solicitante
 				req['municipio'] = found_ocorrencia.municipio
@@ -220,6 +227,7 @@ class ocorrencia_handler(object):
 				req['observacoes'] = found_ocorrencia.observacoes
 				req['emergencia'] = found_ocorrencia.emergencia
 				req['status'] = found_ocorrencia.status
+				req['id_atendente'] = found_ocorrencia.id_atendente
 				return json.dumps(req)
 			else:
 				return False
@@ -227,7 +235,7 @@ class ocorrencia_handler(object):
 	def update_ocorrencia(self, session, idocorrencia, ntelefone, nsolicitante, \
 		nmunicipio, nendereco, nnumero, nbairro, nreferencia, \
 		npaciente, nsexo, nidade, nqueixa, nobservacoes, nemergencia, \
-		nstatus):
+		nstatus, nid_atendente):
 		found_ocorrencia = session.query(Ocorrencia).filter_by(id=idocorrencia).first()
 		if not found_ocorrencia:
 			return False
@@ -247,9 +255,11 @@ class ocorrencia_handler(object):
 				found_ocorrencia.observacoes = nobservacoes
 				found_ocorrencia.emergencia = nemergencia
 				found_ocorrencia.status = nstatus
+				found_ocorrencia.id_atendente = nid_atendente
 				session.commit()
 				session.flush()
 				req = {}
+				req['id'] = found_ocorrencia.id
 				req['telefone'] = found_ocorrencia.telefone
 				req['solicitante'] = found_ocorrencia.solicitante
 				req['municipio'] = found_ocorrencia.municipio
@@ -264,6 +274,7 @@ class ocorrencia_handler(object):
 				req['observacoes'] = found_ocorrencia.observacoes
 				req['emergencia'] = found_ocorrencia.emergencia
 				req['status'] = found_ocorrencia.status
+				req['id_atendente'] = found_ocorrencia.id_atendente
 				return json.dumps(req)
 
 		def get_all_ocorrencia(self, session):
@@ -274,6 +285,7 @@ class ocorrencia_handler(object):
 			else:
 				for found_ocorrencia in ocorrencias:
 					req = {}
+					req['id'] = found_ocorrencia.id
 					req['telefone'] = found_ocorrencia.telefone
 					req['solicitante'] = found_ocorrencia.solicitante
 					req['municipio'] = found_ocorrencia.municipio
@@ -288,6 +300,7 @@ class ocorrencia_handler(object):
 					req['observacoes'] = found_ocorrencia.observacoes
 					req['emergencia'] = found_ocorrencia.emergencia
 					req['status'] = found_ocorrencia.status
+					req['id_atendente'] = found_ocorrencia.id_atendente
 					ocorrencia_list.append(json.dumps(req))
 				return ocorrencia_list
 
@@ -300,6 +313,7 @@ class ocorrencia_handler(object):
 				for found_ocorrencia in ocorrencias:
 					if found_ocorrencia.status == 'aberta':
 						req = {}
+						req['id'] = found_ocorrencia.id
 						req['telefone'] = found_ocorrencia.telefone
 						req['solicitante'] = found_ocorrencia.solicitante
 						req['municipio'] = found_ocorrencia.municipio
@@ -314,6 +328,7 @@ class ocorrencia_handler(object):
 						req['observacoes'] = found_ocorrencia.observacoes
 						req['emergencia'] = found_ocorrencia.emergencia
 						req['status'] = found_ocorrencia.status
+						req['id_atendente'] = found_ocorrencia.id_atendente
 						ocorrencia_list.append(json.dumps(req))
 				return ocorrencia_list
 
@@ -326,6 +341,7 @@ class ocorrencia_handler(object):
 				for found_ocorrencia in ocorrencias:
 					if found_ocorrencia.status == 'encerrada':
 						req = {}
+						req['id'] = found_ocorrencia.id
 						req['telefone'] = found_ocorrencia.telefone
 						req['solicitante'] = found_ocorrencia.solicitante
 						req['municipio'] = found_ocorrencia.municipio
@@ -340,6 +356,7 @@ class ocorrencia_handler(object):
 						req['observacoes'] = found_ocorrencia.observacoes
 						req['emergencia'] = found_ocorrencia.emergencia
 						req['status'] = found_ocorrencia.status
+						req['id_atendente'] = found_ocorrencia.id_atendente
 						ocorrencia_list.append(json.dumps(req))
 				return ocorrencia_list
 
