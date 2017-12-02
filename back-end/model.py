@@ -13,7 +13,7 @@ Base = declarative_base()
 class Ocorrencia(Base):
 	__tablename__ = 'Ocorrencia'
 	id = Column(Integer, primary_key=True)
-	telefone = Column(Integer)
+	telefone = Column(String)
 	solicitante = Column(String)
 	municipio = Column(String)
 	endereco = Column(String)

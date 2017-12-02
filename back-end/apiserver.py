@@ -22,6 +22,7 @@ admin = Admin(app)
 
 session = auxiliary.ostools().db_connection()
 
+sinal_handler = auxiliary.sinal_handler()
 recurso_handler = auxiliary.recurso_handler()
 ocorrencia_handler = auxiliary.ocorrencia_handler()
 
@@ -33,6 +34,36 @@ def app_teardown(response_or_exc):
 #@app.route('/')
 #def index():
 #	return "https://www.youtube.com/watch?v=hC8CH0Z3L54"
+
+@app.route('/sinal/register', methods=['GET', 'POST'])
+def create_sinal():
+	if request.method == 'GET':
+		return "ok"
+	if request.method == 'POST':
+		id_ocorrencia = request.form['id_ocorrencia']
+		pressao = request.form['pressao']
+		frequencia_cardiaca = request.form['frequencia_cardiaca']
+		saturacao_oxigenio = request.form['saturacao_oxigenio']
+		temperatura = request.form['temperatura']
+
+
+@app.route('/sinal/getdata/<int:id_sinal>', methods=['GET'])
+def get_data_sinal(id_sinal):
+	if request.method == 'GET':
+		found_sinal = sinal_handler.get_sinal(session, id_sinal)
+		return str(found_sinal)
+
+@app.route('/sinal/get_by_ocorrencia/<int:ocorrencia_id>', methods=['GET'])
+def get_sinal_by_ocorrencia(ocorrencia_id):
+	if request.method == 'GET':
+		found_sinal = sinal_handler.get_sinal_by_ocorrencia(session, ocorrencia_id)
+		return str(found_sinal)
+
+@app.route('/sinal/getall', methods=['GET'])
+def get_all_sinal():
+	if request.method == 'GET':
+		sinais = sinal_handler.get_all_sinal(session)
+		return str(sinais)
 
 @app.route('/recurso/status/<int:recurso_id>', methods=['GET', 'POST'])
 def update_status_recurso(recurso_id):
@@ -140,7 +171,7 @@ def update_status(id_ocorrencia):
 @app.route('/ocorrencia/getdata/<int:id_ocorrencia>', methods=['GET', 'POST'])
 def get_ocorrencia(id_ocorrencia):
 	if request.method == 'GET':
-		found_ocorrencia. = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
+		found_ocorrencia = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
 		return str(found_ocorrencia).replace("'", "")
 	if request.method == 'POST':
 		id_ocorrencia = request.form['id']

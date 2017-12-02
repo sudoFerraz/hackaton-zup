@@ -17,7 +17,7 @@ class ostools(object):
 		session = Session
 		return session
 
-class sinais_handler(object):
+class sinal_handler(object):
 
 	def create_sinal(self, session, nid_ocorrencia, npressao, nfrequencia, nsaturacao, \
 		ntemperatura):
@@ -68,6 +68,7 @@ class sinais_handler(object):
 				req['saturacao_oxigenio'] = sinal.saturacao_oxigenio
 				req['temperatura'] = sinal.temperatura
 				sinal_list.append(json.dumps(req))
+			return sinal_list
 
 class user_handler(object):
 
@@ -204,6 +205,24 @@ class recurso_handler(object):
 
 
 
+class media_handler(object):
+
+	def create_media(self, session, id_ocorrencia, new_binary):
+		new_media = model.Media(ocorrencia_id=id_ocorrencia, binary=new_binary)
+		session.add(new_media)
+		session.commit()
+		session.flush()
+		return "ok"
+
+	def delete_media(self, session, id_ocorrencia):
+		deleted_media = session.query(Media).filter_by(ocorrencia_id=id_ocorrencia).delete()
+		session.commit()
+		session.flush()
+		return "ok"
+
+	def update_media(self, session, id_ocorrencia, binary):
+		return "ok"
+
 class ocorrencia_handler(object):
 
 	def create_ocorrencia(self, session, ntelefone, nsolicitante, \
@@ -264,6 +283,7 @@ class ocorrencia_handler(object):
 				req['observacoes'] = found_ocorrencia.observacoes
 				req['emergencia'] = found_ocorrencia.emergencia
 				req['status'] = found_ocorrencia.status
+				req['data'] = str(found_ocorrencia.data)[0:19]
 				req['id_atendente'] = found_ocorrencia.id_atendente
 				return json.dumps(req)
 			else:
@@ -295,6 +315,7 @@ class ocorrencia_handler(object):
 				req['observacoes'] = found_ocorrencia.observacoes
 				req['emergencia'] = found_ocorrencia.emergencia
 				req['status'] = found_ocorrencia.status
+				req['data'] = str(found_ocorrencia.data)[0:19]
 				req['id_atendente'] = found_ocorrencia.id_atendente
 				ocorrencia_list.append(json.dumps(req))
 			return ocorrencia_list
@@ -323,6 +344,7 @@ class ocorrencia_handler(object):
 					req['observacoes'] = found_ocorrencia.observacoes
 					req['emergencia'] = found_ocorrencia.emergencia
 					req['status'] = found_ocorrencia.status
+					req['data'] = str(found_ocorrencia.data)[0:19]
 					req['id_atendente'] = found_ocorrencia.id_atendente
 					ocorrencia_list.append(json.dumps(req))
 			return ocorrencia_list
@@ -351,6 +373,7 @@ class ocorrencia_handler(object):
 					req['observacoes'] = found_ocorrencia.observacoes
 					req['emergencia'] = found_ocorrencia.emergencia
 					req['status'] = found_ocorrencia.status
+					req['data'] = str(found_ocorrencia.data)[0:19]
 					req['id_atendente'] = found_ocorrencia.id_atendente
 					ocorrencia_list.append(json.dumps(req))
 			return ocorrencia_list
@@ -397,6 +420,7 @@ class ocorrencia_handler(object):
 				req['observacoes'] = found_ocorrencia.observacoes
 				req['emergencia'] = found_ocorrencia.emergencia
 				req['status'] = found_ocorrencia.status
+				req['data'] = str(found_ocorrencia.data)[0:19]
 				req['id_atendente'] = found_ocorrencia.id_atendente
 				return json.dumps(req)
 			return False
