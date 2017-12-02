@@ -43,14 +43,14 @@ def update_status_recurso():
 		recurso_handler.update_status(session, recurso_id)
 		return "ok"
 
-@app.route('/recurso/delete', method=['POST'])
+@app.route('/recurso/delete', methods=['POST'])
 def delete_recurso():
 	if request.method == 'POST':
 		recurso_id = request.form['id']
 		recurso_handler.delete_recurso(session, recurso_id)
 		return "ok"
 
-@app.route('/recurso/getdata', method=['POST'])
+@app.route('/recurso/getdata', methods=['POST'])
 def get_recurso():
 	if request.method == 'POST':
 		recurso_id = request.form['id']
@@ -106,7 +106,7 @@ def ocorrencia_register():
 		id_atendente = request.form['id_atendente']
 		ocorrencia_handler.create_ocorrencia(session, telefone, solicitante, \
 			municipio, endereco, numero, bairro, referencia, paciente, \
-			sexo, idade, queixa, observaoes, emergencia, status, id_atendente)
+			sexo, idade, queixa, observacoes, emergencia, status, id_atendente)
 		return "ok"
 
 @app.route('/ocorrencia/delete', methods=['POST'])

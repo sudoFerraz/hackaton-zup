@@ -166,7 +166,6 @@ class recurso_handler(object):
 
 
 
-
 class ocorrencia_handler(object):
 
 	def create_ocorrencia(self, session, ntelefone, nsolicitante, \
@@ -232,6 +231,92 @@ class ocorrencia_handler(object):
 			else:
 				return False
 
+	def teste(self, session):
+			return "ok"
+
+	def get_all_ocorrencias(self, session):
+		ocorrencias = session.query(Ocorrencia).all()
+		ocorrencia_list = []
+		if not ocorrencias:
+			return False
+		else:
+			for found_ocorrencia in ocorrencias:
+				req = {}
+				req['id'] = found_ocorrencia.id
+				req['telefone'] = found_ocorrencia.telefone
+				req['solicitante'] = found_ocorrencia.solicitante
+				req['municipio'] = found_ocorrencia.municipio
+				req['endereco'] = found_ocorrencia.endereco
+				req['numero'] = found_ocorrencia.numero
+				req['bairro'] = found_ocorrencia.bairro
+				req['referencia'] = found_ocorrencia.referencia
+				req['paciente'] = found_ocorrencia.paciente
+				req['sexo'] = found_ocorrencia.sexo
+				req['idade'] = found_ocorrencia.idade
+				req['queixa'] = found_ocorrencia.queixa
+				req['observacoes'] = found_ocorrencia.observacoes
+				req['emergencia'] = found_ocorrencia.emergencia
+				req['status'] = found_ocorrencia.status
+				req['id_atendente'] = found_ocorrencia.id_atendente
+				ocorrencia_list.append(json.dumps(req))
+			return ocorrencia_list
+
+	def get_all_open(self, session):
+		ocorrencias = session.query(Ocorrencia).all()
+		ocorrencia_list = []
+		if not ocorrencias:
+			return False
+		else:
+			for found_ocorrencia in ocorrencias:
+				if found_ocorrencia.status == 'aberta':
+					req = {}
+					req['id'] = found_ocorrencia.id
+					req['telefone'] = found_ocorrencia.telefone
+					req['solicitante'] = found_ocorrencia.solicitante
+					req['municipio'] = found_ocorrencia.municipio
+					req['endereco'] = found_ocorrencia.endereco
+					req['numero'] = found_ocorrencia.numero
+					req['bairro'] = found_ocorrencia.bairro
+					req['referencia'] = found_ocorrencia.referencia
+					req['paciente'] = found_ocorrencia.paciente
+					req['sexo'] = found_ocorrencia.sexo
+					req['idade'] = found_ocorrencia.idade
+					req['queixa'] = found_ocorrencia.queixa
+					req['observacoes'] = found_ocorrencia.observacoes
+					req['emergencia'] = found_ocorrencia.emergencia
+					req['status'] = found_ocorrencia.status
+					req['id_atendente'] = found_ocorrencia.id_atendente
+					ocorrencia_list.append(json.dumps(req))
+			return ocorrencia_list
+
+	def get_all_close(self, session):
+		ocorrencias = session.query(Ocorrencia).all()
+		ocorrencia_list = []
+		if not ocorrencias:
+			return False
+		else:
+			for found_ocorrencia in ocorrencias:
+				if found_ocorrencia.status == 'encerrada':
+					req = {}
+					req['id'] = found_ocorrencia.id
+					req['telefone'] = found_ocorrencia.telefone
+					req['solicitante'] = found_ocorrencia.solicitante
+					req['municipio'] = found_ocorrencia.municipio
+					req['endereco'] = found_ocorrencia.endereco
+					req['numero'] = found_ocorrencia.numero
+					req['bairro'] = found_ocorrencia.bairro
+					req['referencia'] = found_ocorrencia.referencia
+					req['paciente'] = found_ocorrencia.paciente
+					req['sexo'] = found_ocorrencia.sexo
+					req['idade'] = found_ocorrencia.idade
+					req['queixa'] = found_ocorrencia.queixa
+					req['observacoes'] = found_ocorrencia.observacoes
+					req['emergencia'] = found_ocorrencia.emergencia
+					req['status'] = found_ocorrencia.status
+					req['id_atendente'] = found_ocorrencia.id_atendente
+					ocorrencia_list.append(json.dumps(req))
+			return ocorrencia_list
+
 	def update_ocorrencia(self, session, idocorrencia, ntelefone, nsolicitante, \
 		nmunicipio, nendereco, nnumero, nbairro, nreferencia, \
 		npaciente, nsexo, nidade, nqueixa, nobservacoes, nemergencia, \
@@ -276,89 +361,10 @@ class ocorrencia_handler(object):
 				req['status'] = found_ocorrencia.status
 				req['id_atendente'] = found_ocorrencia.id_atendente
 				return json.dumps(req)
+			return False
 
-		def get_all_ocorrencia(self, session):
-			ocorrencias = session.query(Ocorrencia).all()
-			ocorrencia_list = []
-			if not ocorrencias:
-				return False
-			else:
-				for found_ocorrencia in ocorrencias:
-					req = {}
-					req['id'] = found_ocorrencia.id
-					req['telefone'] = found_ocorrencia.telefone
-					req['solicitante'] = found_ocorrencia.solicitante
-					req['municipio'] = found_ocorrencia.municipio
-					req['endereco'] = found_ocorrencia.endereco
-					req['numero'] = found_ocorrencia.numero
-					req['bairro'] = found_ocorrencia.bairro
-					req['referencia'] = found_ocorrencia.referencia
-					req['paciente'] = found_ocorrencia.paciente
-					req['sexo'] = found_ocorrencia.sexo
-					req['idade'] = found_ocorrencia.idade
-					req['queixa'] = found_ocorrencia.queixa
-					req['observacoes'] = found_ocorrencia.observacoes
-					req['emergencia'] = found_ocorrencia.emergencia
-					req['status'] = found_ocorrencia.status
-					req['id_atendente'] = found_ocorrencia.id_atendente
-					ocorrencia_list.append(json.dumps(req))
-				return ocorrencia_list
 
-		def get_all_open(self, session):
-			ocorrencias = session.query(Ocorrencia).all()
-			ocorrencia_list = []
-			if not ocorrencias:
-				return False
-			else:
-				for found_ocorrencia in ocorrencias:
-					if found_ocorrencia.status == 'aberta':
-						req = {}
-						req['id'] = found_ocorrencia.id
-						req['telefone'] = found_ocorrencia.telefone
-						req['solicitante'] = found_ocorrencia.solicitante
-						req['municipio'] = found_ocorrencia.municipio
-						req['endereco'] = found_ocorrencia.endereco
-						req['numero'] = found_ocorrencia.numero
-						req['bairro'] = found_ocorrencia.bairro
-						req['referencia'] = found_ocorrencia.referencia
-						req['paciente'] = found_ocorrencia.paciente
-						req['sexo'] = found_ocorrencia.sexo
-						req['idade'] = found_ocorrencia.idade
-						req['queixa'] = found_ocorrencia.queixa
-						req['observacoes'] = found_ocorrencia.observacoes
-						req['emergencia'] = found_ocorrencia.emergencia
-						req['status'] = found_ocorrencia.status
-						req['id_atendente'] = found_ocorrencia.id_atendente
-						ocorrencia_list.append(json.dumps(req))
-				return ocorrencia_list
-
-		def get_all_close(self, session):
-			ocorrencias = session.query(Ocorrencia).all()
-			ocorrencia_list = []
-			if not ocorrencias:
-				return False
-			else:
-				for found_ocorrencia in ocorrencias:
-					if found_ocorrencia.status == 'encerrada':
-						req = {}
-						req['id'] = found_ocorrencia.id
-						req['telefone'] = found_ocorrencia.telefone
-						req['solicitante'] = found_ocorrencia.solicitante
-						req['municipio'] = found_ocorrencia.municipio
-						req['endereco'] = found_ocorrencia.endereco
-						req['numero'] = found_ocorrencia.numero
-						req['bairro'] = found_ocorrencia.bairro
-						req['referencia'] = found_ocorrencia.referencia
-						req['paciente'] = found_ocorrencia.paciente
-						req['sexo'] = found_ocorrencia.sexo
-						req['idade'] = found_ocorrencia.idade
-						req['queixa'] = found_ocorrencia.queixa
-						req['observacoes'] = found_ocorrencia.observacoes
-						req['emergencia'] = found_ocorrencia.emergencia
-						req['status'] = found_ocorrencia.status
-						req['id_atendente'] = found_ocorrencia.id_atendente
-						ocorrencia_list.append(json.dumps(req))
-				return ocorrencia_list
+		
 
 
 						
