@@ -30,6 +30,7 @@ class Ocorrencia(Base):
 	data = Column(DateTime, server_default=func.now())
 	id_atendente = Column(Integer, ForeignKey('User.id'))
 
+
 class User(Base):
 
     __tablename__ = 'User'
@@ -45,12 +46,14 @@ class Media(Base):
 
 
 class Recurso(Base):
-	__tablename__ = 'Recurso'
-	id = Column(Integer, primary_key=True)
-	status = Column(String)
-	localizacao = Column(String)
-	tipo = Column(String)
-	atendendo = Column(Integer, ForeignKey('Ocorrencia.id'))
+
+    __tablename__ = 'Recurso'
+    id = Column(Integer, primary_key=True)
+    status = Column(String)
+    longitude = Column(String)
+    latitude = Column(String)
+    tipo = Column(String)
+    atendendo = Column(Integer, ForeignKey('Ocorrencia.id'))
 
 class Sinais_Vitais(Base):
 	__tablename__ = 'Sinais_Vitais'

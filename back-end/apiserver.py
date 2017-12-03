@@ -198,7 +198,7 @@ def update_status(id_ocorrencia):
 def get_ocorrencia(id_ocorrencia):
 	if request.method == 'GET':
 		found_ocorrencia = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
-		return str(found_ocorrencia).replace("'", "")
+		return Response(str(found_ocorrencia).replace("'", ""), mimetype='application/json')
 	if request.method == 'POST':
 		id_ocorrencia = request.form['id']
 		found_ocorrencia = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
