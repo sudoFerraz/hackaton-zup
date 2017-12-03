@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask import redirect
 from flask import jsonify
 from flask import request
 import auxiliary
@@ -22,6 +23,10 @@ db = SQLAlchemy(app)
 admin = Admin(app)
 
 session = auxiliary.ostools().db_connection()
+
+@app.route('/redirect')
+def redirected():
+    return redirect("http://www.google.com", code=302)
 
 sinal_handler = auxiliary.sinal_handler()
 recurso_handler = auxiliary.recurso_handler()
@@ -91,14 +96,15 @@ def get_all_sinal():
 		sinais = sinal_handler.get_all_sinal(session)
 		return Response(str(sinais), mimetype='application/json')
 
-@app.route('/recurso/status/<int:recurso_id>', methods=['GET', 'POST'])
-def update_status_recurso(recurso_id):
+@app.route('/recurso/status/', methods=['GET', 'POST'])
+def update_status_recurso():
 	if request.method == 'GET':
-		recurso_handler.update_status(session, recurso_id)
-		return "ok"
+		#recurso_handler.update_status(session, recurso_id)
+		return "get"
 	elif request.method == 'POST':
-		recurso_id = request.form['id']
-		recurso_handler.update_status(session, recurso_id)
+		recurso_id = request.form['recurso_id']
+		ocorrencia_id = request.form['ocorrencia_id']
+		recurso_handler.update_status(session, recurso_id, ocorrencia_id)
 		return "ok"
 
 @app.route('/recurso/delete/<int:recurso_id>', methods=['GET', 'POST'])

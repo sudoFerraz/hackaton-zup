@@ -117,12 +117,13 @@ class recurso_handler(object):
 		session.flush()
 		return 'ok'
 
-	def update_status(self, session, id_recurso):
+	def update_status(self, session, id_recurso, id_ocorrencia):
 		found_recurso = session.query(Recurso).filter_by(id=id_recurso).first()
 		if not found_recurso:
 			return "erro"
 		if found_recurso.status == "disponivel":
 			found_recurso.status = "ocupado"
+			found_recurso.atendendo = id_ocorrencia
 		elif found_recurso.status == "ocupado":
 			found_recurso.status = "disponivel"
 		session.commit()
