@@ -65,17 +65,18 @@ def update_user():
 		return "ok"
 
 
-@app.route('/sinal/register', methods=['GET', 'POST'])
-def create_sinal():
+@app.route('/sinal/register/<int:id_ocorrencia>/<string:pressao>/<string:frequencia_cardiaca>/<string:saturacao_oxigenio>/<string:temperatura>', methods=['GET'])
+def create_sinal(id_ocorrencia, pressao, frequencia_cardiaca, saturacao_oxigenio, temperatura):
 	if request.method == 'GET':
+		sinal_handler.create_sinal(session, pressao, frequencia_cardiaca, saturacao_oxigenio, temperatura)
 		return "ok"
-	if request.method == 'POST':
-		id_ocorrencia = request.form['id_ocorrencia']
-		pressao = request.form['pressao']
-		frequencia_cardiaca = request.form['frequencia_cardiaca']
-		saturacao_oxigenio = request.form['saturacao_oxigenio']
-		temperatura = request.form['temperatura']
-		return "ok"
+	# if request.method == 'POST':
+	# 	id_ocorrencia = request.form['id_ocorrencia']
+	# 	pressao = request.form['pressao']
+	# 	frequencia_cardiaca = request.form['frequencia_cardiaca']
+	# 	saturacao_oxigenio = request.form['saturacao_oxigenio']
+	# 	temperatura = request.form['temperatura']
+	# 	return "ok"
 
 
 @app.route('/sinal/getdata/<int:id_sinal>', methods=['GET'])
@@ -96,17 +97,18 @@ def get_all_sinal():
 		sinais = sinal_handler.get_all_sinal(session)
 		return Response(str(sinais), mimetype='application/json')
 
-@app.route('/recurso/status/', methods=['GET', 'POST'])
-def update_status_recurso():
+@app.route('/recurso/status/<int:recurso_id>/<int:ocorrencia_id>', methods=['GET', 'POST'])
+def update_status_recurso(recurso_id, ocorrencia_id):
 	if request.method == 'GET':
+		recurso_handler.update_status(session, recurso_id, ocorrencia_id)
 		#recurso_handler.update_status(session, recurso_id)
 		return "get"
 	elif request.method == 'POST':
-		recurso_id = request.form['recurso_id']
-		ocorrencia_id = request.form['ocorrencia_id']
-        for recurso in recurso_id:
-            recurso_handler.update_status(session, recurso_id, ocorrencia_id)
-        return "ok"
+		recursoid = request.form['recurso_id']
+		ocorrenciaid = request.form['ocorrencia_id']
+		for recurso in recurso_id:
+			recurso_handler.update_status(session, recursoid, ocorrenciaid)
+		return "ok"
 		#recurso_handler.update_status(session, recurso_id, ocorrencia_id)
 		#return "ok"
 
@@ -131,10 +133,10 @@ def get_recurso(recurso_id):
 		return Response(str(recurso), mimetype='application/json')
 
 
-@app.route('/recurso/register/<string:status>/<string:longitude>/<string:latitude>/<string:tipo>', methods=['GET', 'POST'])
-def register_recurso(status, longitude, latitude, tipo):
+@app.route('/recurso/register/<string:longitude>/<string:latitude>/<string:tipo>', methods=['GET', 'POST'])
+def register_recurso(longitude, latitude, tipo):
 	if request.method == 'GET':
-		recurso_handler.create_recurso(session, status, longitude, latitude, tipo)
+		recurso_handler.create_recurso(session, longitude, latitude, tipo)
         return "get"
 	if request.method == 'POST':
 		status = request.form['status']
@@ -145,7 +147,7 @@ def register_recurso(status, longitude, latitude, tipo):
 
 @app.route('/recurso/getall', methods=['GET'])
 def get_all_recurso():
-	if requset.method == 'GET':
+	if request.method == 'GET':
 		recursos = recurso_handler.get_all_recurso(session)
 		return Response(str(recursos).replace("'", ""), mimetype='application/json')
 

@@ -110,13 +110,12 @@ class user_handler(object):
 
 class recurso_handler(object):
 
-	def create_recurso(self, session, nstatus, nlocalizacao, ntipo):
-		new_recurso = model.Recurso(status=nstatus, localizacao=nlocalizacao, tipo=ntipo)
+	def create_recurso(self, session, nlongitude, nlatitude, ntipo):
+		new_recurso = model.Recurso(status="disponivel", longitude=nlongitude, latitude=nlatitude, tipo=ntipo)
 		session.add(new_recurso)
 		session.commit()
 		session.flush()
 		return 'ok'
-
 
 
 	def update_status(self, session, id_recurso, id_ocorrencia):
@@ -147,11 +146,12 @@ class recurso_handler(object):
 		if not found_recurso:
 			return "erro"
 		req = {}
-		req['id'] = found_recurso.id
-		req['status'] = found_recurso.status
-		req['localizacao'] = found_recurso.localizacao
-		req['tipo'] = found_recurso.tipo
-		req['atendendo'] = found_recurso.atendendo
+		req['id'] = recurso.id
+		req['status'] = recurso.status
+		req['longitude'] = recurso.longitude
+		req['latitude'] = recurso.latitude
+		req['tipo'] = recurso.tipo
+		req['atendendo'] = recurso.atendendo
 		return json.dumps(req)
 
 	def get_all_recurso(self, session):
@@ -164,14 +164,13 @@ class recurso_handler(object):
 				req = {}
 				req['id'] = recurso.id
 				req['status'] = recurso.status
-				req['localizacao'] = recurso.localizacao
+				req['longitude'] = recurso.longitude
+				req['latitude'] = recurso.latitude
 				req['tipo'] = recurso.tipo
 				req['atendendo'] = recurso.atendendo
 				recurso_list.append(json.dumps(req))
 			return recurso_list
 
-
-#Pega todos recursos disponiveis
 	def get_all_open(self, session):
 		recursos = session.query(Recurso).all()
 		if not recursos:
@@ -181,9 +180,10 @@ class recurso_handler(object):
 			for recurso in recursos:
 				if recurso.status == "disponivel":
 					req = {}
-					recurso['id'] = recurso.id
+					req['id'] = recurso.id
 					req['status'] = recurso.status
-					req['localizacao'] = recurso.localizacao
+					req['longitude'] = recurso.longitude
+					req['latitude'] = recurso.latitude
 					req['tipo'] = recurso.tipo
 					req['atendendo'] = recurso.atendendo
 					recurso_list.append(json.dumps(req))
@@ -200,7 +200,8 @@ class recurso_handler(object):
 					req = {}
 					req['id'] = recurso.id
 					req['status'] = recurso.status
-					req['localizacao'] = recurso.localizacao
+					req['longitude'] = recurso.longitude
+					req['latitude'] = recurso.latitude
 					req['tipo'] = recurso.tipo
 					req['atendendo'] = recurso.atendendo
 					recurso_list.append(json.dumps(req))
