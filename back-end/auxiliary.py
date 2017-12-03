@@ -117,6 +117,8 @@ class recurso_handler(object):
 		session.flush()
 		return 'ok'
 
+
+
 	def update_status(self, session, id_recurso, id_ocorrencia):
 		found_recurso = session.query(Recurso).filter_by(id=id_recurso).first()
 		if not found_recurso:
@@ -427,9 +429,9 @@ class ocorrencia_handler(object):
 			return False
 
 
-		
 
 
-						
+
+
 
 

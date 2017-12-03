@@ -104,8 +104,11 @@ def update_status_recurso():
 	elif request.method == 'POST':
 		recurso_id = request.form['recurso_id']
 		ocorrencia_id = request.form['ocorrencia_id']
-		recurso_handler.update_status(session, recurso_id, ocorrencia_id)
-		return "ok"
+        for recurso in recurso_id:
+            recurso_handler.update_status(session, recurso_id, ocorrencia_id)
+        return "ok"
+		#recurso_handler.update_status(session, recurso_id, ocorrencia_id)
+		#return "ok"
 
 @app.route('/recurso/delete/<int:recurso_id>', methods=['GET', 'POST'])
 def delete_recurso(recurso_id):
@@ -127,11 +130,13 @@ def get_recurso(recurso_id):
 		recurso = recurso_handler.get_recurso(session, recurso_id)
 		return Response(str(recurso), mimetype='application/json')
 
-@app.route('/recurso/register', methods=['GET', 'POST'])
-def register_recurso():
+
+@app.route('/recurso/register/<string:status>/<string:longitude>/<string:latitude>/<string:tipo>', methods=['GET', 'POST'])
+def register_recurso(status, longitude, latitude, tipo):
 	if request.method == 'GET':
-		return "get"
-	elif request.method == 'POST':
+		recurso_handler.create_recurso(session, status, longitude, latitude, tipo)
+        return "get"
+	if request.method == 'POST':
 		status = request.form['status']
 		localizacao = request.form['localizacao']
 		tipo = request.form['tipo']
