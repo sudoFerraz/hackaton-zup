@@ -64,11 +64,19 @@ def update_user():
 		user_handler.update_user(session, user_id, name, tipo)
 		return "ok"
 
+@app.route('/ocorrencia/sinais/<int:id_ocorrencia>')
+def ocorrencia_sinais(id_ocorrencia):
+    found_sinal = sinal_handler.get_sinal_by_ocorrencia(session, id_ocorrencia)
+    found_ocorrencia = ocorrencia_handler.get_ocorrencia(session, id_ocorrencia)
+    req = {}
+    req['ocorrencia'] = found_ocorrencia
+    req['sinais'] = found_sinal
+    return Response(str(req).replace("'", ""))
 
 @app.route('/sinal/register/<int:id_ocorrencia>/<string:pressao>/<string:frequencia_cardiaca>/<string:saturacao_oxigenio>/<string:temperatura>', methods=['GET'])
 def create_sinal(id_ocorrencia, pressao, frequencia_cardiaca, saturacao_oxigenio, temperatura):
 	if request.method == 'GET':
-		sinal_handler.create_sinal(session, pressao, frequencia_cardiaca, saturacao_oxigenio, temperatura)
+		sinal_handler.create_sinal(session, id_ocorrencia, pressao, frequencia_cardiaca, saturacao_oxigenio, temperatura)
 		return "ok"
 	# if request.method == 'POST':
 	# 	id_ocorrencia = request.form['id_ocorrencia']
